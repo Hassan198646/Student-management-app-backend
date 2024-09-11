@@ -1,6 +1,8 @@
-const express = require("express");
+const express = require('express')
+const user = require('./controllers/user')
 const app = express();
 const db = require("./config/db");
+user(app);
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
