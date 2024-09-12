@@ -1,6 +1,9 @@
 const express = require('express')
+const cors = require('cors')
 const user = require('./controllers/user')
 const app = express();
+app.use(express.json());
+app.use(cors());
 const db = require("./config/db");
 user(app);
 app.get("/", (req, res) => {
