@@ -1,4 +1,5 @@
 const knex = require("../knex");
+const bycrypt = require("bcryptjs");
 async function createUser(args) {
   try {
     const response = await knex("user").insert({
@@ -7,30 +8,34 @@ async function createUser(args) {
       email: args.email,
       password: args.password,
     });
-    return { status: true, response: response };
+    return { status: true, message: response };
   } catch (err) {
     return { status: false, error: err };
   }
 }
 
-async function loginUser(email) {
+async function loginUser(email, password) {
   try {
-    const response = await knex
-      .select("email")
+    const user = await knex
+      .select("email", "password")
       .from("user")
-      .where("email", email);
-    if (response.length > 0) {
-      return { status: true, user: response[0] }; 
+      .where("email", email)
+      .first();
+    if (!user) {
+      return { staus: false, user: "User Not Found" };
+    }
+    const isPasswordCorrect = await bycrypt.compare(password, user.password);
+    if (isPasswordCorrect) {
+      return { status: true, message: "Login Successfuly" };
     } else {
-      return { status: false, message: "User not found" }; 
+      return { status: false, message: "Invalid Password" };
     }
   } catch (err) {
     return { status: false, error: err };
   }
 }
 
-
 module.exports = {
   createUser,
-  loginUser
+  loginUser,
 };
