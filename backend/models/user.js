@@ -1,8 +1,7 @@
 const knex = require("../knex");
 const bycrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY =
-  "3f7d0a9d82eaf7479e4a1e2cfe317be55c25bcd67a1f97da53813a9bc1c7f2f9";
+require('dotenv').config();
 async function createUser(args) {
   try {
     const response = await knex("user").insert({
@@ -36,7 +35,7 @@ async function loginUser(email, password) {
         userId: user.id,
         email: user.email,
       },
-      SECRET_KEY,
+      process.env.SECRET_KEY,
       { expiresIn: "1h" }
     );
     return { status: true, token: token, message: "Login successful" };
