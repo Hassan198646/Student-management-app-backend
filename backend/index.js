@@ -1,11 +1,14 @@
 const express = require('express')
 const cors = require('cors')
-const user = require('./controllers/user')
 const app = express();
+require('dotenv').config();
+const user = require('./controllers/user')
+const middleware = require('./middleware/auth')
 app.use(express.json());
 app.use(cors());
-require('dotenv').config();
 user(app);
+middleware(app);
+
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
