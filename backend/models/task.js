@@ -49,9 +49,19 @@ async function updateTask(id, args) {
   }
 }
 
+async function deleteTask(id) {
+  try {
+    const response = await knex("task").del().where("id", id);
+    return { status: true, response: response };
+  } catch (error) {
+    return { status: false, error: error };
+  }
+}
+
 module.exports = {
   createTask,
   getTask,
   getTaskById,
   updateTask,
+  deleteTask,
 };
