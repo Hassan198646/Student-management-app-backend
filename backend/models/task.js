@@ -1,11 +1,14 @@
 const knex = require("../knex");
-async function createTask(args) {
+const { upload } = require("../services/uploadFile");
+
+async function createTask(args, imagePath) {
   try {
     const response = await knex("task").insert({
       id: args.id,
       title: args.title,
       priorityLevel: args.priorityLevel,
       status: args.status,
+      imagePath: args.imagePath,
       date: args.date,
       description: args.description,
     });

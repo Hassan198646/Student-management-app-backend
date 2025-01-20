@@ -10,7 +10,7 @@ exports.up = function (knex) {
     table.string("status", 255).notNullable();
     table.date("date").notNullable();
     table.string("description").notNullable();
-    table.binary("image");
+    table.string("imagePath").notNullable();
   });
 };
 

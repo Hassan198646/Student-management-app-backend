@@ -1,12 +1,15 @@
 const task = require("../models/task");
-
-module.exports = function (app) {
+const { upload } = require("../services/uploadFile");
+module.exports = function (app,express) {
   const { createTask, getTask, updateTask, deleteTask } = task;
   const task_base_url = "/api/task";
 
-  app.post(`${task_base_url}`, async (req, res) => {
+  app.post(`${task_base_url}`,upload.single("image"), async (req, res) => {
     try {
-      const response = await createTask(req.body);
+      const taskData = req.body; 
+      const imagePath = req.file?.file; 
+      console.log(imagePath)
+      const response = await createTask(taskData,imagePath);
       console.log(response);
       res.status(200).send(response);
     } catch (err) {
@@ -79,7 +82,7 @@ module.exports = function (app) {
 
   app.delete(`${task_base_url}/:id`, async (req, res) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       const response = await deleteTask(id);
       res.status(200).send(response);
     } catch (error) {
